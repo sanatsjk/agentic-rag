@@ -1,0 +1,23 @@
+name: Sync to Hugging Face Spaces
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to Hugging Face Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add hf https://huggingface.co/spaces/sanatkumarsjk/agentic-spaces || true
+          git remote set-url hf https://huggingface.co/spaces/sanatkumarsjk/agentic-spaces
+          git push https://user:$HF_TOKEN@huggingface.co/spaces/sanatkumarsjk/agentic-spaces main --force
