@@ -7,4 +7,3 @@ arxiv>=2.1.0
 numpy>=1.24.0
 requests>=2.31.0
 python-dotenv>=1.0.0
-pyaudioop>=0.0.1
