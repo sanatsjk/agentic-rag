@@ -1,8 +1,9 @@
-from smolagents import ToolCallingAgent, InferenceClientModel
+import os
+from smolagents import ToolCallingAgent, LiteLLMModel
 from smolagents.memory import ActionStep, FinalAnswerStep
 from src.tools import ALL_TOOLS
 
-MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
+MODEL_ID = "groq/llama-3.3-70b-versatile"
 
 SYSTEM_PROMPT = """\
 You are a research paper assistant with access to a knowledge base of arxiv papers.
@@ -26,10 +27,9 @@ Your job is to answer user questions by searching through the indexed papers.
 
 def create_agent(hf_token: str) -> ToolCallingAgent:
     """Create a smolagents ToolCallingAgent with the paper tools."""
-    model = InferenceClientModel(
+    model = LiteLLMModel(
         model_id=MODEL_ID,
-        token=hf_token,
-        provider="together",
+        api_key=os.getenv("GROQ_API_KEY", ""),
     )
 
     agent = ToolCallingAgent(

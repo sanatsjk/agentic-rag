@@ -116,7 +116,16 @@ THEME = gr.themes.Soft(
     radius_size=gr.themes.sizes.radius_md,
 )
 
-with gr.Blocks(title="Research Paper Assistant") as demo:
+_GRADIO_MAJOR = int(gr.__version__.split(".")[0])
+
+_blocks_kw = dict(title="Research Paper Assistant")
+_launch_kw: dict = {}
+if _GRADIO_MAJOR >= 6:
+    _launch_kw.update(theme=THEME, css=CUSTOM_CSS)
+else:
+    _blocks_kw.update(theme=THEME, css=CUSTOM_CSS)
+
+with gr.Blocks(**_blocks_kw) as demo:
 
     # ── Header ──
     gr.HTML(
@@ -154,8 +163,10 @@ with gr.Blocks(title="Research Paper Assistant") as demo:
         )
 
     # ── Chat ──
+    _chat_type = {"type": "messages"} if _GRADIO_MAJOR < 6 else {}
     gr.ChatInterface(
         fn=answer_question,
+        **_chat_type,
         examples=[
             ["What are the latest approaches to improving RAG accuracy?"],
             ["List all papers in the knowledge base"],
@@ -163,6 +174,7 @@ with gr.Blocks(title="Research Paper Assistant") as demo:
             ["Compare different retrieval methods proposed in recent papers"],
         ],
         chatbot=gr.Chatbot(
+            **_chat_type,
             height=480,
             placeholder=(
                 "<div style='text-align:center; opacity:0.55; padding:2rem 0'>"
@@ -191,4 +203,4 @@ reasons over them step-by-step, and returns a synthesized answer with citations.
 
 
 if __name__ == "__main__":
-    demo.launch(theme=THEME, css=CUSTOM_CSS)
+    demo.launch(**_launch_kw)
