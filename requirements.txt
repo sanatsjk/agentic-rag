@@ -1,4 +1,4 @@
-gradio>=4.0.0
+gradio>=6.9.0
 smolagents>=1.0.0
 huggingface_hub>=0.25.0
 sentence-transformers>=2.2.0
